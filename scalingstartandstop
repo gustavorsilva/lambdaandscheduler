@@ -1,0 +1,98 @@
+import boto3
+import fnmatch
+
+def lambda_handler(event, context):
+    # Inicializar o cliente do serviço Auto Scaling
+    autoscaling_client = boto3.client('autoscaling')
+
+    # Dicionário com os nomes dos grupos de Auto Scaling e os valores desejados para "start" e "stop"
+    grupos = {
+        'grupo-prod-*': {
+            'desired_capacity_start': 5,
+            'min_size_start': 2,
+            'max_size_start': 10,
+            'desired_capacity_stop': 0,
+            'min_size_stop': 0,
+            'max_size_stop': 0
+        },
+        'grupo-dev-*': {
+            'desired_capacity_start': 3,
+            'min_size_start': 1,
+            'max_size_start': 5,
+            'desired_capacity_stop': 0,
+            'min_size_stop': 0,
+            'max_size_stop': 0
+        },
+        'grupo-stage-*': {
+            'desired_capacity_start': 2,
+            'min_size_start': 1,
+            'max_size_start': 3,
+            'desired_capacity_stop': 0,
+            'min_size_stop': 0,
+            'max_size_stop': 0
+        }
+    }
+
+    # Verificar se o parâmetro de entrada "action" está presente
+    if 'action' not in event:
+        return {
+            'statusCode': 400,
+            'body': 'O parâmetro "action" é obrigatório.'
+        }
+
+    action = event['action']
+
+    if action == 'start':
+        # Realizar o "start" do Auto Scaling (definindo os valores desejados) para todos os grupos
+        for padrao_nome, valores in grupos.items():
+            try:
+                grupos_correspondentes = fnmatch.filter(get_all_auto_scaling_groups(), padrao_nome)
+                for grupo_correspondente in grupos_correspondentes:
+                    response = autoscaling_client.update_auto_scaling_group(
+                        AutoScalingGroupName=grupo_correspondente,
+                        DesiredCapacity=valores['desired_capacity_start'],
+                        MinSize=valores['min_size_start'],
+                        MaxSize=valores['max_size_start']
+                    )
+                    print(f"Grupo {grupo_correspondente} atualizado com sucesso para 'start'.")
+                    print(f"Novo DesiredCapacity: {valores['desired_capacity_start']}")
+                    print(f"Novo MinSize: {valores['min_size_start']}")
+                    print(f"Novo MaxSize: {valores['max_size_start']}")
+            except Exception as e:
+                print(f"Erro ao atualizar os grupos para 'start': {str(e)}")
+    elif action == 'stop':
+        # Realizar o "stop" do Auto Scaling (definindo os valores para 0) para todos os grupos
+        for padrao_nome, valores in grupos.items():
+            try:
+                grupos_correspondentes = fnmatch.filter(get_all_auto_scaling_groups(), padrao_nome)
+                for grupo_correspondente in grupos_correspondentes:
+                    response = autoscaling_client.update_auto_scaling_group(
+                        AutoScalingGroupName=grupo_correspondente,
+                        DesiredCapacity=valores['desired_capacity_stop'],
+                        MinSize=valores['min_size_stop'],
+                        MaxSize=valores['max_size_stop']
+                    )
+                    print(f"Grupo {grupo_correspondente} atualizado com sucesso para 'stop'.")
+                    print(f"Novo DesiredCapacity: {valores['desired_capacity_stop']}")
+                    print(f"Novo MinSize: {valores['min_size_stop']}")
+                    print(f"Novo MaxSize: {valores['max_size_stop']}")
+            except Exception as e:
+                print(f"Erro ao atualizar os grupos para 'stop': {str(e)}")
+    else:
+        return {
+            'statusCode': 400,
+            'body': 'O parâmetro "action" deve ser "start" ou "stop".'
+        }
+
+    # Retornar uma mensagem de conclusão
+    return f"Alterações de scaling realizadas com sucesso para a ação '{action}'"
+
+
+def get_all_auto_scaling_groups():
+    # Inicializar o cliente do serviço Auto Scaling
+    autoscaling_client = boto3.client('autoscaling')
+
+    # Obter a lista de todos os grupos de Auto Scaling
+    response = autoscaling_client.describe_auto_scaling_groups()
+    grupos_auto_scaling = response['AutoScalingGroups']
+    return [grupo['AutoScalingGroupName'] for grupo in grupos_auto_scaling]
