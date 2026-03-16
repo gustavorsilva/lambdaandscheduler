@@ -1,39 +1,33 @@
 WITH base AS (
     SELECT
-        DATE_TRUNC('month', DATA)        AS mes,
+        DATE_TRUNC('month', DATA)   AS mes,
         TAG,
-        REGISTRO,
         UNICOS,
-        IMPACTOS,
-        IMPACTO_PERC
+        IMPACTOS
     FROM sua_tabela
-    WHERE GRANULARIDADE = 'dia-dia'           -- exclui os registros mensais (GERAL_MES)
-      AND REGISTRO      = 'Jornada'           -- evita duplicidade com Jornada_Subjornada
-),
-
-agregado AS (
-    SELECT
-        mes,
-        TAG,
-        MAX(UNICOS)                                         AS max_unicos,
-        SUM(IMPACTOS)                                       AS total_impactos,
-        -- % Impacto Ponderado: Σ(unicos × %impacto) / Σ(unicos)
-        ROUND(
-            SUM(UNICOS * IMPACTO_PERC) / NULLIF(SUM(UNICOS), 0),
-        4)                                                  AS perc_impacto_ponderado
-    FROM base
-    GROUP BY
-        mes,
-        TAG
+    WHERE GRANULARIDADE = 'dia-dia'       -- exclui linhas do tipo 'mes' (GERAL_MES)
+      AND REGISTRO      = 'Jornada'       -- evita duplicidade com Jornada_Subjornada
 )
 
 SELECT
-    TO_CHAR(mes, 'MM/YYYY')         AS mes_ano,
+    TO_CHAR(mes, 'MM/YYYY')                                     AS mes_ano,
     TAG,
-    max_unicos,
-    total_impactos,
-    ROUND(perc_impacto_ponderado * 100, 2) || '%'  AS perc_ponderado
-FROM agregado
+
+    -- Maior valor de únicos registrado no mês para a TAG
+    MAX(UNICOS)                                                  AS max_unicos,
+
+    -- Total de impactos no mês por TAG
+    SUM(IMPACTOS)                                                AS total_impactos,
+
+    -- % Impacto Ponderado = Σ Impactos / Σ Únicos
+    ROUND(
+        SUM(IMPACTOS)::NUMERIC / NULLIF(SUM(UNICOS), 0) * 100
+    , 2) || '%'                                                  AS perc_impacto_ponderado
+
+FROM base
+GROUP BY
+    mes,
+    TAG
 ORDER BY
     mes,
     TAG;
