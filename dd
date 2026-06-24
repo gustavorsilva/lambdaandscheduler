@@ -1,0 +1,43 @@
+Comparativo: ECS Fargate vs EKS + Spot Instances
+Critério	ECS Fargate	EKS + Spot Instances
+Custo de Infraestrutura	Médio	Muito Baixo
+Custo Operacional	Baixo	Alto
+Administração de Cluster	Não	Sim
+Kubernetes	Não Necessário	Obrigatório
+Escalabilidade	Excelente	Excelente
+Disponibilidade	Alta	Depende da estratégia Spot
+Atualizações	AWS gerencia	Equipe gerencia
+Observabilidade	Simples	Avançada
+GitOps	Limitado	Excelente
+Multi-cloud	Não	Sim
+Service Mesh	Limitado	Completo
+Tempo de Implantação	Rápido	Mais demorado
+Complexidade	Baixa	Alta
+Lock-in AWS	Alto	Baixo
+Tolerância a Falhas	Alta	Depende da arquitetura
+Comparação de Custos
+
+Imagine:
+
+50 microserviços
+200 vCPU
+400 GB RAM
+ECS Fargate
+Item	Valor Mensal
+CPU	US$ 1.800
+Memória	US$ 1.000
+ALB	US$ 100
+Logs	US$ 200
+Total	~US$ 3.100
+EKS + Spot
+Item	Valor Mensal
+EKS Control Plane	US$ 72
+EC2 Spot	US$ 600
+ALB	US$ 100
+Logs	US$ 200
+Total	~US$ 972
+Economia
+Cenário	Custo
+ECS Fargate	US$ 3.100
+EKS Spot	US$ 972
+Economia	~68%
