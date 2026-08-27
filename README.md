@@ -195,5 +195,3 @@ Acessos ao Secret Manager.
  Retenção de logs segura para auditoria.
 
 
- <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/4feaf459-1e15-4fc4-b65c-aeff327b142b" />
-
