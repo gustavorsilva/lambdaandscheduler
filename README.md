@@ -195,3 +195,6 @@ Acessos ao Secret Manager.
  Retenção de logs segura para auditoria.
 
 
+Profissional com experiência em DevOps e SRE, atuando em ambientes de alta disponibilidade, automação, observabilidade e infraestrutura em Cloud. Experiência sólida em AWS, com atuação em serviços como EKS, EC2, RDS, S3, Lambda, CloudWatch, ALB e ElastiCache, além de implantação e administração de ambientes Kubernetes/EKS, incluindo Karpenter, ArgoCD, Argo Rollouts e Istio. Forte atuação em Infraestrutura como Código, utilizando Terraform e automação com Python, Ansible e GitHub Actions. Experiência em observabilidade e monitoramento, trabalhando com Splunk, Grafana, Prometheus, Thanos e CloudWatch, além da atuação em projetos de migração para Datadog, envolvendo métricas, logs, APM, traces, dashboards e monitores. Perfil voltado para automação, confiabilidade, redução de incidentes, melhoria contínua e otimização de ambientes Cloud.
+
+
