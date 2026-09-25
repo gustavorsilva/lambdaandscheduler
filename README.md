@@ -193,8 +193,3 @@ Acessos ao Secret Manager.
  Alertas proativos configurados.
 
  Retenção de logs segura para auditoria.
-
-
-Minha trajetória profissional foi construída na área de infraestrutura, DevOps e SRE, evoluindo de uma atuação mais operacional para posições cada vez mais focadas em Cloud, automação, observabilidade e confiabilidade. Ao longo dessa jornada, adquiri experiência em ambientes AWS, trabalhando com serviços como EKS, EC2, RDS, S3, Lambda, CloudWatch e ElastiCache, além da implantação e administração de Kubernetes/EKS, ArgoCD, Argo Rollouts, Karpenter e Istio. Também tenho forte experiência com Infrastructure as Code, principalmente Terraform, automação com Python e Ansible e pipelines CI/CD. Na área de observabilidade, atuei com Splunk, Grafana, Prometheus, Thanos e CloudWatch, participando também de uma importante migração para o Datadog, envolvendo logs, métricas, APM, traces, dashboards e monitores. Gosto de desafios técnicos, automação e de buscar soluções que tornem os ambientes mais confiáveis, escaláveis e eficientes.
-
-
